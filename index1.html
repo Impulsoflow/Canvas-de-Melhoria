@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas de Melhoria — Instituto Impulso Coaching</title>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/PptxGenJS@3.12.0/dist/pptxgen.bundle.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg1: #0b4aa2;
+            --bg2: #062b62;
+            --surface: #f4f9ff;
+            --card: #ffffff;
+            --text: #0f172a;
+            --muted: #475569;
+            --primary: #0b63ce;
+            --primary2: #084aa0;
+            --accent: #38bdf8;
+            --accent-gold: #c8a84e;
+            --border: #cfe6ff;
+            --shadow: 0 14px 34px rgba(2,32,71,.18);
+            --shadow2: 0 8px 20px rgba(2,32,71,.12);
+            --radius: 18px;
+            --radius2: 14px;
+            --green: #00a65a;
+            --dark-green: #007a42;
+            --red: #dc2626;
+            --blue: #005ce6;
+            --dark-blue: #003d99;
+            --yellow: #f5a623;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            background:
+                radial-gradient(1200px 700px at 20% 10%, rgba(56,189,248,.35), transparent 55%),
+                radial-gradient(900px 600px at 85% 15%, rgba(255,215,0,.18), transparent 60%),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1080px;
+            margin: 18px auto;
+            background: linear-gradient(180deg, rgba(244,249,255,.97), rgba(244,249,255,.94));
+            border: 1px solid rgba(56,189,248,.35);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+
+        .wrap { padding: 26px; }
+
+        .header {
+            text-align: center;
+            padding: 10px 0 20px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid rgba(11,99,206,.08);
+        }
+
+        .logo-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .logo-impulso {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            font-weight: normal;
+            color: #64748b;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            margin: 4px 0 16px;
+            font-weight: 700;
+            color: #0b2a52;
+            font-size: 12px;
+            letter-spacing: .02em;
+            font-family: Arial, sans-serif;
+        }
+
+        .sub-title {
+            margin: 0;
+            font-size: 32px;
+            line-height: 1.15;
+            color: #063b7a;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .header-desc {
+            margin: 10px auto 0;
+            max-width: 72ch;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        /* Empresa em Destaque */
+        .company-banner {
+            display: none;
+            margin: 16px auto 0;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, rgba(56,189,248,.12), rgba(200,168,78,.12));
+            border: 2px solid var(--accent-gold);
+            border-radius: 14px;
+            text-align: center;
+            max-width: 500px;
+            animation: fadeInScale 0.5s ease;
+        }
+
+        .company-banner.show { display: block; }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .company-banner .cb-label {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: Arial, sans-serif;
+        }
+
+        .company-banner .cb-name {
+            font-size: 22px;
+            font-weight: 900;
+            color: #063b7a;
+            margin-top: 2px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(207,230,255,.95);
+            border-radius: var(--radius2);
+            box-shadow: var(--shadow2);
+            padding: 20px;
+        }
+
+        .instructions {
+            background: linear-gradient(180deg, rgba(56,189,248,.14), rgba(56,189,248,.08));
+            border: 1px solid rgba(56,189,248,.25);
+            border-left: 6px solid var(--accent);
+            border-radius: var(--radius2);
+            padding: 18px;
+            margin: 14px 0 18px;
+            color: var(--text);
+        }
+
+        .instructions p {
+            margin: 0 0 8px;
+            font-size: 14px;
+            text-align: justify;
+        }
+
+        .instructions p:last-child { margin-bottom: 0; }
+
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 18px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid rgba(11,99,206,.18);
+            border-radius: 12px 12px 4px 4px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+        }
+
+        .nav-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(11,99,206,.10);
+        }
+
+        .nav-tab.active {
+            background: white;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 18px rgba(11,99,206,.12);
+            border-bottom-color: white;
+        }
+
+        .nav-tab .tab-emoji { font-size: 18px; }
+
+        .nav-tab.new-project {
+            background: linear-gradient(45deg, var(--green), var(--dark-green));
+            color: white;
+            border-color: var(--green);
+            animation: pulse-green 2.5s infinite;
+        }
+
+        @keyframes pulse-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0,166,90,0.35); }
+            50% { box-shadow: 0 0 0 8px rgba(0,166,90,0); }
+        }
+
+        .tab-panel {
+            display: none;
+            background: var(--card);
+            border: 1px solid rgba(207,230,255,.60);
+            border-radius: 0 var(--radius2) var(--radius2) var(--radius2);
+            box-shadow: var(--shadow2);
+            overflow: hidden;
+        }
+
+        .tab-panel.active { display: block; }
+
+        .project-header {
+            background: linear-gradient(180deg, rgba(244,249,255,1), rgba(230,240,255,.5));
+            padding: 28px;
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .project-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary), var(--primary2));
+            color: white;
+            padding: 5px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-family: Arial, sans-serif;
+        }
+
+        .project-company {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            font-family: Arial, sans-serif;
+        }
+
+        .project-name {
+            font-size: 24px;
+            font-weight: 900;
+            color: #063b7a;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .project-name .icon { font-size: 28px; }
+
+        .team-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: 1.5px solid rgba(207,230,255,.70);
+            font-size: 13px;
+            box-shadow: 0 4px 10px rgba(2,32,71,.05);
+            transition: transform .15s ease, box-shadow .2s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(2,32,71,.08);
+        }
+
+        .team-member .role-icon {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 17px; flex-shrink: 0;
+        }
+
+        .role-leader .role-icon { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+        .role-time .role-icon { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+        .role-writer .role-icon { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .role-question .role-icon { background: linear-gradient(135deg, #fce4ec, #f8bbd0); }
+        .role-heart .role-icon { background: linear-gradient(135deg, #f3e5f5, #e1bee7); }
+        .role-voice .role-icon { background: linear-gradient(135deg, #e0f7fa, #b2ebf2); }
+
+        .member-info { line-height: 1.3; }
+        .member-role { font-weight: 800; color: var(--text); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-family: Arial, sans-serif; }
+        .member-name { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+        .canvas-container { padding: 24px; }
+
+        .canvas-section-title {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-family: Arial, sans-serif;
+        }
+
+        .section-red { background: linear-gradient(135deg, #dc2626, #991b1b); box-shadow: 0 4px 12px rgba(220,38,38,.20); }
+        .section-blue { background: linear-gradient(135deg, var(--blue), var(--dark-blue)); box-shadow: 0 4px 12px rgba(0,92,230,.20); }
+        .section-green { background: linear-gradient(135deg, var(--green), var(--dark-green)); box-shadow: 0 4px 12px rgba(0,166,90,.20); }
+        .section-gold { background: linear-gradient(135deg, var(--yellow), #d48f1a); box-shadow: 0 4px 12px rgba(245,166,35,.20); }
+
+        .canvas-row { display: grid; gap: 14px; margin-bottom: 18px; }
+        .canvas-row.three-cols { grid-template-columns: 1fr 1fr 1fr; }
+        .canvas-row.two-cols { grid-template-columns: 1fr 1fr; }
+
+        .canvas-card {
+            border-radius: var(--radius2);
+            padding: 18px;
+            min-height: 130px;
+            transition: transform .15s ease, box-shadow .25s ease;
+        }
+
+        .canvas-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(2,32,71,.10); }
+
+        .card-blue { background: linear-gradient(180deg, #edf4ff, #dbe8ff); border: 1.5px solid #b3d1ff; border-left: 5px solid var(--blue); }
+        .card-red { background: linear-gradient(180deg, #fff5f5, #fee2e2); border: 1.5px solid #fca5a5; border-left: 5px solid #dc2626; }
+        .card-green { background: linear-gradient(180deg, #ecfdf5, #d1fae5); border: 1.5px solid #86efac; border-left: 5px solid var(--green); }
+        .card-gold { background: linear-gradient(180deg, #fffbeb, #fef3c7); border: 1.5px solid #fcd34d; border-left: 5px solid var(--yellow); }
+
+        .canvas-card .card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .canvas-card .card-emoji { font-size: 20px; }
+        .canvas-card .card-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text); font-family: Arial, sans-serif; }
+        .canvas-card .card-question { font-size: 11px; color: #94a3b8; font-style: italic; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed rgba(148,163,184,.4); }
+        .canvas-card .card-content { font-size: 13.5px; line-height: 1.65; color: #334155; }
+        .canvas-card .card-content ul { padding-left: 18px; }
+        .canvas-card .card-content li { margin-bottom: 4px; }
+
+        .new-project-form { padding: 28px; }
+
+        .form-intro {
+            background: linear-gradient(180deg, rgba(56,189,248,.12), rgba(56,189,248,.06));
+            border: 1px solid rgba(56,189,248,.25);
+            border-left: 6px solid var(--accent);
+            padding: 22px;
+            border-radius: var(--radius2);
+            margin-bottom: 28px;
+        }
+
+        .form-intro h2 { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 800; }
+        .form-intro p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+        .form-section { margin-bottom: 28px; }
+
+        .form-section-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 16px; padding: 12px 20px;
+            border-radius: 12px; color: white;
+            font-weight: 800; font-size: 15px; font-family: Arial, sans-serif;
+        }
+
+        .form-section-header .fs-emoji { font-size: 20px; }
+
+        .form-grid { display: grid; gap: 14px; }
+        .form-grid.two-cols { grid-template-columns: 1fr 1fr; }
+
+        .form-group { display: flex; flex-direction: column; }
+
+        .form-group label {
+            font-weight: 800; font-size: 13px; color: #063b7a;
+            margin-bottom: 5px; display: flex; align-items: center; gap: 6px;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-group label .label-emoji { font-size: 15px; }
+
+        .form-group .helper { font-size: 11px; color: #94a3b8; font-style: italic; margin-bottom: 6px; }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 13px 16px;
+            border: 1.5px solid rgba(11,99,206,.28);
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: box-shadow .2s ease, border-color .2s ease;
+            background: #fff; outline: none; color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: rgba(11,99,206,.55);
+            box-shadow: 0 0 0 4px rgba(56,189,248,.22);
+        }
+
+        .form-group input.input-highlight {
+            border: 2px solid var(--accent-gold);
+            background: linear-gradient(180deg, #fffdf5, #fff);
+            font-size: 16px;
+            font-weight: 700;
+            padding: 16px;
+        }
+
+        .form-group input.input-highlight:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(200,168,78,.25);
+        }
+
+        .form-group textarea { resize: vertical; min-height: 76px; }
+
+        .btn-group { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            appearance: none; border: none; cursor: pointer;
+            border-radius: 14px; padding: 14px 32px;
+            font-size: 14px; font-weight: 800;
+            font-family: 'Poppins', sans-serif;
+            transition: transform .12s ease, box-shadow .2s ease, filter .2s ease;
+            display: inline-flex; align-items: center; gap: 8px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .btn:hover { transform: translateY(-2px); filter: saturate(1.05); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--primary2));
+            color: #fff;
+            box-shadow: 0 10px 18px rgba(11,99,206,.22);
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, var(--green), var(--dark-green));
+            color: #fff;
+            box-shadow: 0 10px 18px rgba(0,166,90,.22);
+        }
+
+        .btn-outline {
+            background: #fff; color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(11,99,206,.08);
+        }
+
+        .btn-pptx {
+            background: linear-gradient(45deg, #D24726, #b33a1a);
+            color: white; font-size: 15px; padding: 16px 40px;
+            box-shadow: 0 10px 22px rgba(210,71,38,.28);
+            position: relative; overflow: hidden;
+        }
+
+        .btn-pptx::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .btn-print { background: linear-gradient(45deg, #475569, #334155); color: white; box-shadow: 0 8px 16px rgba(71,85,105,.22); }
+
+        .btn-ghost {
+            background: #fff; color: #0b2a52;
+            border: 1.5px solid rgba(11,99,206,.22);
+            box-shadow: 0 4px 12px rgba(2,32,71,.06);
+        }
+
+        .btn-ghost:hover { border-color: var(--accent); }
+
+        .generated-canvas {
+            display: none; margin-top: 28px; padding: 28px;
+            background: linear-gradient(180deg, rgba(56,189,248,.06), rgba(56,189,248,.02));
+            border-radius: var(--radius2);
+            border: 2px dashed rgba(0,166,90,.35);
+        }
+
+        .generated-canvas.show { display: block; }
+
+        .pptx-preview {
+            display: none; margin-top: 24px;
+            border: 2px solid #D24726;
+            border-radius: var(--radius2);
+            overflow: hidden; background: #0f172a;
+        }
+
+        .pptx-preview.show { display: block; }
+
+        .pptx-preview-header {
+            background: linear-gradient(135deg, #D24726, #b33a1a);
+            color: white; padding: 14px 22px;
+            display: flex; align-items: center; gap: 12px;
+            font-weight: 800; font-size: 14px; font-family: Arial, sans-serif;
+        }
+
+        .slides-preview { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 18px; }
+
+        .slide-thumb {
+            background: white; border-radius: 10px; overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,.25);
+            transition: transform .2s ease;
+        }
+
+        .slide-thumb:hover { transform: scale(1.03); }
+
+        .slide-thumb-header {
+            padding: 10px 14px; color: white;
+            font-size: 10px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            font-family: Arial, sans-serif;
+        }
+
+        .slide-thumb-body {
+            padding: 12px 14px; font-size: 11px;
+            line-height: 1.5; color: var(--muted); min-height: 95px;
+        }
+
+        .slide-thumb-body .st-title { font-weight: 800; color: var(--text); font-size: 12px; margin-bottom: 5px; font-family: Arial, sans-serif; }
+        .slide-thumb-body ul { padding-left: 14px; margin-top: 3px; }
+        .slide-thumb-body li { margin-bottom: 2px; }
+
+        .cloud-status {
+            display: none; margin-top: 14px; padding: 12px 20px;
+            border-radius: 12px; text-align: center;
+            font-size: 13px; font-weight: 700; font-family: Arial, sans-serif;
+        }
+
+        .cloud-status.show { display: block; }
+        .cloud-status.saving { background: rgba(56,189,248,.10); border: 1px solid rgba(56,189,248,.30); color: var(--primary); }
+        .cloud-status.saved { background: rgba(0,166,90,.08); border: 1px solid rgba(0,166,90,.30); color: var(--green); }
+        .cloud-status.error { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.30); color: var(--red); }
+
+        .roles-guide { padding: 28px; background: linear-gradient(180deg, var(--surface), #fff); }
+
+        .roles-title {
+            text-align: center; font-size: 17px; font-weight: 900;
+            color: #063b7a; margin-bottom: 6px; font-family: Arial, sans-serif;
+        }
+
+        .roles-subtitle {
+            text-align: center; color: var(--muted); font-size: 13px;
+            margin-bottom: 24px; padding-bottom: 16px;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+        .role-card {
+            padding: 20px; border-radius: var(--radius2);
+            border: 1.5px solid rgba(207,230,255,.60);
+            background: white; text-align: center;
+            transition: transform .15s ease, box-shadow .25s ease;
+            box-shadow: 0 4px 10px rgba(2,32,71,.04);
+        }
+
+        .role-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(2,32,71,.08); border-color: var(--accent); }
+
+        .role-card .rc-emoji { font-size: 34px; display: block; margin-bottom: 10px; }
+        .role-card .rc-title { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 3px; font-family: Arial, sans-serif; }
+        .role-card .rc-subtitle { font-size: 11px; color: var(--primary); font-weight: 700; margin-bottom: 10px; }
+        .role-card .rc-desc { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+        .roles-note {
+            margin-top: 22px; padding: 18px;
+            background: linear-gradient(180deg, rgba(56,189,248,.08), rgba(56,189,248,.03));
+            border-radius: 12px; text-align: center;
+            border: 1px solid rgba(56,189,248,.25);
+            border-left: 6px solid var(--accent);
+        }
+
+        .roles-note strong { color: #063b7a; font-size: 14px; }
+        .roles-note p { color: var(--muted); font-size: 13px; margin-top: 5px; line-height: 1.6; }
+
+        .loading-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(6,43,98,0.88);
+            z-index: 10000;
+            justify-content: center; align-items: center;
+            flex-direction: column; gap: 20px;
+        }
+
+        .loading-overlay.show { display: flex; }
+
+        .loading-spinner {
+            width: 56px; height: 56px;
+            border: 5px solid rgba(255,255,255,0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text { color: white; font-size: 16px; font-weight: 700; text-align: center; }
+        .loading-text small { opacity: 0.7; display: block; margin-top: 4px; font-size: 13px; font-weight: 400; }
+
+        .toast {
+            position: fixed; bottom: 28px; right: 28px;
+            background: var(--green); color: white;
+            padding: 14px 24px; border-radius: 14px;
+            font-size: 14px; font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 24px rgba(0,0,0,.25);
+            transform: translateY(100px); opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 9999; display: flex;
+            align-items: center; gap: 10px; max-width: 420px;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        .app-footer {
+            text-align: center; padding: 18px;
+            color: rgba(255,255,255,.45); font-size: 11px;
+            font-weight: 600; font-family: Arial, sans-serif;
+        }
+
+        .app-footer a { color: rgba(255,255,255,.6); text-decoration: none; }
+        .app-footer a:hover { color: var(--accent); }
+
+        @media (max-width: 900px) {
+            .canvas-row.three-cols, .canvas-row.two-cols,
+            .form-grid.two-cols, .roles-grid, .slides-preview { grid-template-columns: 1fr; }
+            .nav-tab { padding: 10px 14px; font-size: 12px; }
+            .wrap { padding: 18px; }
+            .project-name { font-size: 20px; }
+        }
+
+        @media (max-width: 600px) {
+            .team-info { flex-direction: column; }
+            .slides-preview { grid-template-columns: 1fr; }
+            body { padding: 10px; }
+        }
+
+        @media print {
+            body { background: white; }
+            .container { box-shadow: none; border: none; }
+            .container::before { display: none; }
+            .nav-tabs, .app-footer, .toast, .loading-overlay, .btn-group, .form-intro, .pptx-preview, .instructions, .cloud-status { display: none; }
+            .tab-panel { display: block !important; border: none; box-shadow: none; }
+            .canvas-card { break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Gerando sua apresentação profissional...<small>Isso leva apenas alguns segundos</small></div>
+    </div>
+
+    <div class="container">
+        <div class="wrap">
+
+            <div class="header">
+                <p class="logo-impulso">Instituto Impulso Coaching de Liderança</p>
+                <p class="tagline">A mudança pode acontecer em um instante</p>
+                <h1 class="sub-title">Canvas de Melhoria</h1>
+                <p class="header-desc">Ferramenta visual e prática para criar, planejar e apresentar projetos de melhoria contínua. Preencha com calma, baixe em PowerPoint e apresente com confiança!</p>
+                <div id="company-banner" class="company-banner">
+                    <div class="cb-label">Workshop aplicado em</div>
+                    <div class="cb-name" id="company-display"></div>
+                </div>
+            </div>
+
+            <div class="instructions">
+                <p><strong style="font-family:Arial,sans-serif; color:var(--primary);">📋 Como funciona:</strong> Navegue pelas abas abaixo. Os <strong>Exemplos 1 e 2</strong> mostram projetos já preenchidos para aprender. Na aba <strong>Novo Projeto</strong>, crie o seu do zero. Use o <strong>Guia de Papéis</strong> para entender a função de cada membro.</p>
+                <p style="color:var(--primary);"><strong style="font-family:Arial,sans-serif;">💡 Dica:</strong> Ao finalizar, clique em <strong>"Baixar PowerPoint"</strong> para gerar 4 slides profissionais prontos para apresentação!</p>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('exemplo1')"><span class="tab-emoji">📘</span> Exemplo 1</button>
+                <button class="nav-tab" onclick="switchTab('exemplo2')"><span class="tab-emoji">📗</span> Exemplo 2</button>
+                <button class="nav-tab new-project" onclick="switchTab('novo')"><span class="tab-emoji">➕</span> Novo Projeto</button>
+                <button class="nav-tab" onclick="switchTab('guia')"><span class="tab-emoji">📖</span> Guia de Papéis</button>
+            </div>
+
+            <!-- EXEMPLO 1 -->
+            <div id="tab-exemplo1" class="tab-panel active">
+                <div class="project-header">
+                    <span class="project-badge">📘 Projeto Modelo 1</span>
+                    <div class="project-company">🏢 Empresa Exemplo S.A.</div>
+                    <div class="project-name"><span class="icon">🎓</span> Treinamento de Liderança e Inteligência Emocional</div>
+                    <div class="team-info">
+                        <div class="team-member role-leader"><div class="role-icon">🔵</div><div class="member-info"><div class="member-role">Líder Facilitador</div><div class="member-name">Carlos Henrique</div></div></div>
+                        <div class="team-member role-time"><div class="role-icon">⏱️</div><div class="member-info"><div class="member-role">Guardião do Tempo</div><div class="member-name">Fernanda Silva</div></div></div>
+                        <div class="team-member role-writer"><div class="role-icon">✍️</div><div class="member-info"><div class="member-role">Escriba Visual</div><div class="member-name">Marcos Oliveira</div></div></div>
+                        <div class="team-member role-question"><div class="role-icon">🧐</div><div class="member-info"><div class="member-role">Questionador Estratégico</div><div class="member-name">Juliana Santos</div></div></div>
+                        <div class="team-member role-heart"><div class="role-icon">❤️</div><div class="member-info"><div class="member-role">Guardião da Empatia</div><div class="member-name">Roberto Lima</div></div></div>
+                        <div class="team-member role-voice"><div class="role-icon">🎤</div><div class="member-info"><div class="member-role">Porta-Voz</div><div class="member-name">Ana Paula Costa</div></div></div>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <div class="canvas-section-title section-red">🔴 O QUE FAÇO? — A Melhoria</div>
+                    <div class="canvas-row" style="grid-template-columns:1fr;"><div class="canvas-card card-red"><div class="card-header"><span class="card-emoji">💡</span><span class="card-title">A Melhoria (Solução)</span></div><div class="card-question">Qual é a ideia central?</div><div class="card-content">Implementar um <strong>programa de desenvolvimento de líderes</strong> com foco em Inteligência Emocional, Liderança Apreciativa e formação de Líder Coach, para melhorar comunicação, reduzir conflitos e humanizar a gestão.</div></div></div>
+                    <div class="canvas-section-title section-blue">🔵 COMO FAÇO? — O Plano</div>
+                    <div class="canvas-row three-cols">
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🤝</span><span class="card-title">Parceiros Chave</span></div><div class="card-question">Quem precisa ajudar?</div><div class="card-content"><ul><li>Recursos Humanos</li><li>Diretoria</li><li>Consultoria especializada</li></ul></div></div>
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">⚙️</span><span class="card-title">Atividades Chave</span></div><div class="card-question">Quais gargalos focar?</div><div class="card-content"><ul><li>Mapeamento comportamental</li><li>Workshops práticos</li><li>Mentoria para gestores</li></ul></div></div>
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🛠️</span><span class="card-title">Recursos Chave</span></div><div class="card-question">O que precisamos?</div><div class="card-content"><ul><li>Orçamento aprovado</li><li>Sala equipada</li><li>Material didático</li><li>Agenda dos líderes</li></ul></div></div>
+                    </div>
+                    <div class="canvas-section-title section-green">🟢 PARA QUEM? — O Impacto</div>
+                    <div class="canvas-row three-cols">
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🎯</span><span class="card-title">Setores Impactados</span></div><div class="card-question">Quem se beneficia?</div><div class="card-content"><ul><li><strong>Direto:</strong> Liderança</li><li><strong>Indireto:</strong> Base operacional</li></ul></div></div>
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">👥</span><span class="card-title">Engajamento</span></div><div class="card-question">Como engajar?</div><div class="card-content">Mostrar que Soft Skills são <strong>ferramentas práticas</strong> para bater metas com menos estresse.</div></div>
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🚀</span><span class="card-title">Implementação</span></div><div class="card-question">Como treinar?</div><div class="card-content"><ul><li>Encontros mensais</li><li>Tarefas práticas</li><li>Diálogo Diário</li></ul></div></div>
+                    </div>
+                    <div class="canvas-section-title section-gold">🟡 QUANTO? — Esforço vs. Resultado</div>
+                    <div class="canvas-row two-cols">
+                        <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📉</span><span class="card-title">Custos e Esforço</span></div><div class="card-content"><ul><li>Investimento no treinamento</li><li>4-8h mensais por líder</li><li>Material e sala</li></ul></div></div>
+                        <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📈</span><span class="card-title">Resultados Esperados</span></div><div class="card-content"><ul><li>✅ Melhoria no Clima</li><li>✅ Redução do Turnover</li><li>✅ Mais engajamento</li><li>✅ Menos conflitos</li></ul></div></div>
+                    </div>
+                </div>
+                <div class="btn-group" style="padding:0 24px 24px;"><button class="btn btn-pptx" onclick="generatePPTX('exemplo1')">📊 Baixar PowerPoint</button></div>
+            </div>
+
+            <!-- EXEMPLO 2 -->
+            <div id="tab-exemplo2" class="tab-panel">
+                <div class="project-header">
+                    <span class="project-badge" style="background:linear-gradient(45deg,var(--green),var(--dark-green));">📗 Projeto Modelo 2</span>
+                    <div class="project-company">🏢 Indústria Modelo Ltda.</div>
+                    <div class="project-name"><span class="icon">🏭</span> Redução de Desperdício na Linha de Produção</div>
+                    <div class="team-info">
+                        <div class="team-member role-leader"><div class="role-icon">🔵</div><div class="member-info"><div class="member-role">Líder Facilitador</div><div class="member-name">Patrícia Mendes</div></div></div>
+                        <div class="team-member role-time"><div class="role-icon">⏱️</div><div class="member-info"><div class="member-role">Guardião do Tempo</div><div class="member-name">Diego Almeida</div></div></div>
+                        <div class="team-member role-writer"><div class="role-icon">✍️</div><div class="member-info"><div class="member-role">Escriba Visual</div><div class="member-name">Luciana Torres</div></div></div>
+                        <div class="team-member role-question"><div class="role-icon">🧐</div><div class="member-info"><div class="member-role">Questionador</div><div class="member-name">Rafael Souza</div></div></div>
+                        <div class="team-member role-heart"><div class="role-icon">❤️</div><div class="member-info"><div class="member-role">Guardiã Empatia</div><div class="member-name">Camila Rocha</div></div></div>
+                        <div class="team-member role-voice"><div class="role-icon">🎤</div><div class="member-info"><div class="member-role">Porta-Voz</div><div class="member-name">Eduardo Martins</div></div></div>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <div class="canvas-section-title section-red">🔴 O QUE FAÇO?</div>
+                    <div class="canvas-row" style="grid-template-columns:1fr;"><div class="canvas-card card-red"><div class="card-header"><span class="card-emoji">💡</span><span class="card-title">A Melhoria</span></div><div class="card-content">Criar um <strong>sistema visual de controle de desperdício</strong> com quadros Kanban, pesagem diária e metas por turno. Meta: <strong>-30% em 3 meses</strong>.</div></div></div>
+                    <div class="canvas-section-title section-blue">🔵 COMO FAÇO?</div>
+                    <div class="canvas-row three-cols">
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🤝</span><span class="card-title">Parceiros</span></div><div class="card-content"><ul><li>Supervisores Produção</li><li>Qualidade</li><li>Manutenção</li><li>Compras</li></ul></div></div>
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">⚙️</span><span class="card-title">Atividades</span></div><div class="card-content"><ul><li>Pesagem de sobras/turno</li><li>Setup de máquinas</li><li>Treinamento operadores</li><li>Reunião semanal</li></ul></div></div>
+                        <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🛠️</span><span class="card-title">Recursos</span></div><div class="card-content"><ul><li>Balança digital</li><li>Quadro Kanban</li><li>Planilha controle</li><li>POPs atualizados</li></ul></div></div>
+                    </div>
+                    <div class="canvas-section-title section-green">🟢 PARA QUEM?</div>
+                    <div class="canvas-row three-cols">
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🎯</span><span class="card-title">Setores</span></div><div class="card-content"><ul><li><strong>Produção</strong> — menos retrabalho</li><li><strong>Qualidade</strong> — padrão estável</li><li><strong>Estoque</strong> — menos perdas</li><li><strong>Financeiro</strong> — economia</li></ul></div></div>
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">👥</span><span class="card-title">Engajamento</span></div><div class="card-content"><ul><li>Ranking visual por turno</li><li>Reconhecimento mensal</li><li>Operadores definem metas</li></ul></div></div>
+                        <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🚀</span><span class="card-title">Implementação</span></div><div class="card-content"><ul><li>DDS</li><li>Treinamento na linha</li><li>Cartilha ilustrada</li><li>Acompanhamento semanal</li></ul></div></div>
+                    </div>
+                    <div class="canvas-section-title section-gold">🟡 QUANTO?</div>
+                    <div class="canvas-row two-cols">
+                        <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📉</span><span class="card-title">Custos</span></div><div class="card-content"><ul><li>R$ 500 em materiais</li><li>2h semanais reunião</li><li>15 min/dia pesagem</li></ul></div></div>
+                        <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📈</span><span class="card-title">Resultados</span></div><div class="card-content"><ul><li>✅ -30% desperdício</li><li>✅ Economia ~R$ 8.000/mês</li><li>✅ Mais segurança alimentar</li><li>✅ Equipe consciente</li></ul></div></div>
+                    </div>
+                </div>
+                <div class="btn-group" style="padding:0 24px 24px;"><button class="btn btn-pptx" onclick="generatePPTX('exemplo2')">📊 Baixar PowerPoint</button></div>
+            </div>
+
+            <!-- NOVO PROJETO -->
+            <div id="tab-novo" class="tab-panel">
+                <div class="new-project-form">
+                    <div class="form-intro">
+                        <h2>🌟 Crie Seu Projeto de Melhoria!</h2>
+                        <p>Preencha os campos abaixo com calma. <strong>Não precisa ser perfeito!</strong> O importante é colocar as ideias no papel. Inspire-se nos exemplos. Quando terminar, clique em <strong>"Gerar Canvas"</strong> e veja a mágica acontecer! 🚀</p>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header" style="background:linear-gradient(45deg,var(--primary),var(--primary2));"><span class="fs-emoji">🏢</span> Dados da Empresa, Projeto e Equipe</div>
+                        <div class="form-grid two-cols">
+                            <div class="form-group" style="grid-column:1/-1;">
+                                <label><span class="label-emoji">🏢</span> Nome da Empresa</label>
+                                <div class="helper">Empresa onde o workshop está sendo aplicado</div>
+                                <input type="text" id="f-company" class="input-highlight" placeholder="Ex: Festpan Alimentos, Ambev, Magazine Luiza..." oninput="updateCompanyBanner()">
+                            </div>
+                            <div class="form-group" style="grid-column:1/-1;">
+                                <label><span class="label-emoji">⭐</span> Nome do Projeto de Melhoria</label>
+                                <div class="helper">Dê um nome forte e claro para o seu projeto!</div>
+                                <input type="text" id="f-project-name" class="input-highlight" placeholder="Ex: Padronização do Setup da Envasadora">
+                            </div>
+                            <div class="form-group"><label><span class="label-emoji">🔵</span> Líder Facilitador</label><input type="text" id="f-leader" placeholder="Nome do líder do grupo"></div>
+                            <div class="form-group"><label><span class="label-emoji">⏱️</span> Guardião do Tempo</label><input type="text" id="f-time" placeholder="Nome"></div>
+                            <div class="form-group"><label><span class="label-emoji">✍️</span> Escriba Visual</label><input type="text" id="f-writer" placeholder="Nome"></div>
+                            <div class="form-group"><label><span class="label-emoji">🧐</span> Questionador Estratégico</label><input type="text" id="f-questioner" placeholder="Nome"></div>
+                            <div class="form-group"><label><span class="label-emoji">❤️</span> Guardião da Empatia</label><input type="text" id="f-heart" placeholder="Nome"></div>
+                            <div class="form-group"><label><span class="label-emoji">🎤</span> Porta-Voz</label><input type="text" id="f-voice" placeholder="Nome"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header section-red"><span class="fs-emoji">🔴</span> O QUE FAÇO? — A Melhoria</div>
+                        <div class="form-grid"><div class="form-group"><label><span class="label-emoji">💡</span> A Melhoria (Solução)</label><div class="helper">Qual é a sua ideia central?</div><textarea id="f-solution" rows="4" placeholder="Ex: Criar um checklist visual para o setup da envasadora..."></textarea></div></div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header section-blue"><span class="fs-emoji">🔵</span> COMO FAÇO? — O Plano</div>
+                        <div class="form-grid">
+                            <div class="form-group"><label><span class="label-emoji">🤝</span> Parceiros Chave</label><div class="helper">Quem precisa ajudar? (Separe por vírgula)</div><textarea id="f-partners" rows="2" placeholder="Ex: Manutenção, Qualidade, Supervisores"></textarea></div>
+                            <div class="form-group"><label><span class="label-emoji">⚙️</span> Atividades Chave</label><div class="helper">Quais gargalos focar? (Separe por vírgula)</div><textarea id="f-activities" rows="2" placeholder="Ex: Setup, troca de produto, envase"></textarea></div>
+                            <div class="form-group"><label><span class="label-emoji">🛠️</span> Recursos Chave</label><div class="helper">O que precisamos? (Separe por vírgula)</div><textarea id="f-resources" rows="2" placeholder="Ex: Novos POPs, ferramentas, tempo"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header section-green"><span class="fs-emoji">🟢</span> PARA QUEM? — O Impacto</div>
+                        <div class="form-grid">
+                            <div class="form-group"><label><span class="label-emoji">🎯</span> Setores Impactados</label><div class="helper">Quais áreas se beneficiam? (Separe por vírgula)</div><textarea id="f-sectors" rows="2" placeholder="Ex: Produção, Qualidade, Estoque"></textarea></div>
+                            <div class="form-group"><label><span class="label-emoji">👥</span> Engajamento</label><div class="helper">Como convencer a equipe?</div><textarea id="f-engagement" rows="2" placeholder="Ex: Mostrar ganhos, reconhecer quem aplicar"></textarea></div>
+                            <div class="form-group"><label><span class="label-emoji">🚀</span> Implementação</label><div class="helper">Como treinar e comunicar?</div><textarea id="f-implementation" rows="2" placeholder="Ex: DDS, treinamento prático, cartilha"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header section-gold"><span class="fs-emoji">🟡</span> QUANTO? — Esforço vs. Resultado</div>
+                        <div class="form-grid two-cols">
+                            <div class="form-group"><label><span class="label-emoji">📉</span> Custos e Esforço</label><div class="helper">Quanto custa?</div><textarea id="f-costs" rows="3" placeholder="Ex: R$ 200, 1h treinamento/turno"></textarea></div>
+                            <div class="form-group"><label><span class="label-emoji">📈</span> Resultados Esperados</label><div class="helper">O que ganhamos?</div><textarea id="f-results" rows="3" placeholder="Ex: -60% tempo setup, +produtividade"></textarea></div>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="generateCanvas()">🚀 Gerar Canvas</button>
+                        <button class="btn btn-outline" onclick="clearForm()">🗑️ Limpar Tudo</button>
+                    </div>
+
+                    <div id="cloud-status" class="cloud-status"></div>
+
+                    <div id="generated-canvas" class="generated-canvas">
+                        <div id="generated-content"></div>
+                        <div class="btn-group" style="margin-top:24px;">
+                            <button class="btn btn-pptx" onclick="generatePPTX('novo')">📊 Baixar PowerPoint (.pptx)</button>
+                            <button class="btn btn-print" onclick="printCanvas()">🖨️ Imprimir / PDF</button>
+                        </div>
+                    </div>
+
+                    <div id="pptx-preview" class="pptx-preview">
+                        <div class="pptx-preview-header"><span class="pp-icon">📊</span> Prévia dos 4 Slides — Pronta para download!</div>
+                        <div id="slides-preview-content" class="slides-preview"></div>
+                        <div class="btn-group" style="padding:0 18px 18px;"><button class="btn btn-pptx" onclick="generatePPTX('novo')" style="width:100%;justify-content:center;">⬇️ Baixar Novamente</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GUIA DE PAPÉIS -->
+            <div id="tab-guia" class="tab-panel">
+                <div class="roles-guide">
+                    <div class="roles-title">👥 Funções Estratégicas do Grupo</div>
+                    <p class="roles-subtitle">Para o workshop funcionar bem, cada membro assume um papel. Trabalho <strong>organizado, respeitoso e produtivo</strong>.</p>
+                    <div class="roles-grid">
+                        <div class="role-card"><span class="rc-emoji">🔵</span><div class="rc-title">1. Líder Facilitador</div><div class="rc-subtitle">O Maestro</div><div class="rc-desc">Conduz o grupo, garante participação e foco. Faz as perguntas certas.</div></div>
+                        <div class="role-card"><span class="rc-emoji">⏱️</span><div class="rc-title">2. Guardião do Tempo</div><div class="rc-subtitle">O Cronometrista</div><div class="rc-desc">Controla o tempo e avisa quando o limite está chegando.</div></div>
+                        <div class="role-card"><span class="rc-emoji">✍️</span><div class="rc-title">3. Escriba Visual</div><div class="rc-subtitle">O Sintetizador</div><div class="rc-desc">Anota ideias de forma clara e organizada no Canvas.</div></div>
+                        <div class="role-card"><span class="rc-emoji">🧐</span><div class="rc-title">4. Questionador Estratégico</div><div class="rc-subtitle">O Auditor</div><div class="rc-desc">Faz perguntas difíceis. "Vai funcionar?" "Temos recursos?"</div></div>
+                        <div class="role-card"><span class="rc-emoji">❤️</span><div class="rc-title">5. Guardião da Empatia</div><div class="rc-subtitle">Fator Humano</div><div class="rc-desc">Ninguém é ignorado. Pessoas importam mais que processos.</div></div>
+                        <div class="role-card"><span class="rc-emoji">🎤</span><div class="rc-title">6. Porta-Voz</div><div class="rc-subtitle">O Embaixador</div><div class="rc-desc">Apresenta o Canvas com clareza e confiança.</div></div>
+                    </div>
+                    <div class="roles-note"><strong>💡 Importante:</strong><p>Papéis podem ser combinados em equipes menores. Nenhuma função pode ficar sem responsável!</p></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="toast" class="toast"><span>✅</span><span id="toast-msg">Sucesso!</span></div>
+
+    <div class="app-footer">
+        <strong>Instituto Impulso Coaching de Liderança</strong> — Canvas de Melhoria Contínua<br>
+        <a href="https://www.impulsocoaching.com.br" target="_blank">www.impulsocoaching.com.br</a> — A mudança pode acontecer em um instante
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════
+        //  CONFIGURAÇÃO
+        // ═══════════════════════════════════════
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsEYLfZZb_PHOolk6NEgI3D5i3US1cFeGYPWj8v0ONjb61R5ybbQqkDpv-R7aEKIf2YA/exec";
+        const CANVAS_API_KEY = "2026Festpan$Canvas";
+        let autoSaveInProgress = false;
+
+        // ═══ DADOS EXEMPLOS ═══
+        const projectsData = {
+            exemplo1: {
+                company: 'Empresa Exemplo S.A.',
+                name: 'Treinamento de Lideranca e Inteligencia Emocional',
+                leader: 'Carlos Henrique',
+                team: 'Fernanda Silva, Marcos Oliveira, Juliana Santos, Roberto Lima, Ana Paula Costa',
+                solution: 'Implementar programa de desenvolvimento de lideres com foco em Inteligencia Emocional, Lideranca Apreciativa e Lider Coach.',
+                partners: 'Recursos Humanos, Diretoria, Consultoria especializada',
+                activities: 'Mapeamento comportamental, Workshops praticos, Mentoria para gestores',
+                resources: 'Orcamento aprovado, Sala equipada, Material didatico, Agenda dos lideres',
+                sectors: 'Lideranca (Gerentes/Coordenadores/Supervisores), Base operacional',
+                engagement: 'Mostrar que Soft Skills sao ferramentas praticas para bater metas com menos estresse.',
+                implementation: 'Encontros mensais, Tarefas praticas, Dialogo Diario',
+                costs: 'Investimento no treinamento, 4-8h mensais por lider, Material e sala',
+                results: 'Melhoria no Clima, Reducao Turnover, Mais engajamento, Menos conflitos'
+            },
+            exemplo2: {
+                company: 'Industria Modelo Ltda.',
+                name: 'Reducao de Desperdicio na Linha de Producao',
+                leader: 'Patricia Mendes',
+                team: 'Diego Almeida, Luciana Torres, Rafael Souza, Camila Rocha, Eduardo Martins',
+                solution: 'Sistema visual de controle de desperdicio com Kanban, pesagem diaria e metas por turno. Meta: -30% em 3 meses.',
+                partners: 'Supervisores Producao, Qualidade, Manutencao, Compras',
+                activities: 'Pesagem sobras/turno, Setup maquinas, Treinamento operadores, Reuniao semanal',
+                resources: 'Balanca digital, Quadro Kanban, Planilha controle, POPs atualizados',
+                sectors: 'Producao, Qualidade, Estoque, Financeiro',
+                engagement: 'Ranking visual por turno, Reconhecimento mensal, Operadores definem metas',
+                implementation: 'DDS, Treinamento na linha, Cartilha ilustrada, Acompanhamento semanal',
+                costs: 'R$ 500 em materiais, 2h semanais reuniao, 15 min/dia pesagem',
+                results: '-30% desperdicio, Economia ~R$ 8.000/mes, Mais seguranca alimentar, Equipe consciente'
+            }
+        };
+
+        // ═══ COMPANY BANNER ═══
+        function updateCompanyBanner() {
+            const v = document.getElementById('f-company').value.trim();
+            const banner = document.getElementById('company-banner');
+            const display = document.getElementById('company-display');
+            if (v.length > 1) {
+                display.textContent = v;
+                banner.classList.add('show');
+            } else {
+                banner.classList.remove('show');
+            }
+        }
+
+        // ═══ TABS ═══
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(t => {
+                if ((tabId === 'exemplo1' && t.textContent.includes('Exemplo 1')) ||
+                    (tabId === 'exemplo2' && t.textContent.includes('Exemplo 2')) ||
+                    (tabId === 'novo' && t.textContent.includes('Novo Projeto')) ||
+                    (tabId === 'guia' && t.textContent.includes('Guia'))) t.classList.add('active');
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ═══ FORM DATA ═══
+        function getFormData() {
+            const g = id => document.getElementById(id).value.trim() || 'A definir';
+            return { company: g('f-company'), name: g('f-project-name'), leader: g('f-leader'), time: g('f-time'), writer: g('f-writer'), questioner: g('f-questioner'), heart: g('f-heart'), voice: g('f-voice'), solution: g('f-solution'), partners: g('f-partners'), activities: g('f-activities'), resources: g('f-resources'), sectors: g('f-sectors'), engagement: g('f-engagement'), implementation: g('f-implementation'), costs: g('f-costs'), results: g('f-results') };
+        }
+
+        // ═══ CLOUD STATUS ═══
+        function setCloudStatus(msg, type) {
+            const el = document.getElementById('cloud-status');
+            el.textContent = msg;
+            el.className = 'cloud-status show ' + type;
+            if (type === 'saved') setTimeout(() => { el.classList.remove('show'); }, 6000);
+        }
+
+        // ═══ AUTO SAVE ═══
+        async function autoSaveCanvas(source) {
+            if (autoSaveInProgress) return;
+            autoSaveInProgress = true;
+
+            try {
+                let d;
+                if (source === 'novo') {
+                    d = getFormData();
+                    if (d.name === 'A definir' || d.leader === 'A definir') { autoSaveInProgress = false; return; }
+                } else if (projectsData[source]) { d = projectsData[source]; }
+                else { autoSaveInProgress = false; return; }
+
+                setCloudStatus('☁️ Salvando projeto na nuvem...', 'saving');
+
+                const payload = {
+                    apiKey: CANVAS_API_KEY,
+                    data: {
+                        company: d.company || '',
+                        projectName: d.name,
+                        leader: d.leader,
+                        timeKeeper: d.time || '',
+                        writer: d.writer || '',
+                        questioner: d.questioner || '',
+                        heartGuardian: d.heart || '',
+                        spokesperson: d.voice || '',
+                        solution: d.solution,
+                        partners: d.partners,
+                        activities: d.activities,
+                        resources: d.resources,
+                        sectors: d.sectors,
+                        engagement: d.engagement,
+                        implementation: d.implementation,
+                        costs: d.costs,
+                        results: d.results
+                    },
+                    pdfBase64: ""
+                };
+
+                const ctrl = new AbortController();
+                const tmout = setTimeout(() => ctrl.abort(), 60000);
+
+                const res = await fetch(APPS_SCRIPT_URL, {
+                    method: "POST", redirect: "follow",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload),
+                    signal: ctrl.signal
+                });
+                clearTimeout(tmout);
+
+                const text = await res.text();
+                let result;
+                try { result = JSON.parse(text); } catch(e) { throw new Error("Resposta invalida"); }
+
+                if (result.ok) {
+                    setCloudStatus('✅ Projeto salvo na nuvem com sucesso! (ID: ' + (result.rowId || '-') + ')', 'saved');
+                    showToast('☁️ Salvo na nuvem!', '#00a65a');
+                } else { throw new Error(result.message || "Erro"); }
+            } catch (err) {
+                console.error("AutoSave:", err);
+                setCloudStatus('⚠️ Erro ao salvar: ' + err.message + ' (o projeto foi gerado localmente)', 'error');
+            } finally { autoSaveInProgress = false; }
+        }
+
+        // ═══ GERAR CANVAS ═══
+        function generateCanvas() {
+            const pn = document.getElementById('f-project-name').value.trim();
+            const ld = document.getElementById('f-leader').value.trim();
+            if (!pn) { showToast('Dê um nome ao projeto!', '#f5a623'); document.getElementById('f-project-name').focus(); return; }
+            if (!ld) { showToast('Preencha o Líder!', '#f5a623'); document.getElementById('f-leader').focus(); return; }
+
+            const d = getFormData();
+            const toL = t => t === 'A definir' ? '<li style="color:#94a3b8;">A definir</li>' : t.split(',').map(i => '<li>' + i.trim() + '</li>').join('');
+
+            const companyLine = d.company !== 'A definir' ? `<div class="project-company">🏢 ${d.company}</div>` : '';
+
+            const html = `
+                <div class="project-header" style="border-radius:14px;margin-bottom:20px;">
+                    <span class="project-badge" style="background:linear-gradient(45deg,var(--green),var(--dark-green));">✅ Seu Projeto</span>
+                    ${companyLine}
+                    <div class="project-name"><span class="icon">🚀</span>${d.name}</div>
+                    <div class="team-info">
+                        <div class="team-member role-leader"><div class="role-icon">🔵</div><div class="member-info"><div class="member-role">Líder</div><div class="member-name">${d.leader}</div></div></div>
+                        <div class="team-member role-time"><div class="role-icon">⏱️</div><div class="member-info"><div class="member-role">Tempo</div><div class="member-name">${d.time}</div></div></div>
+                        <div class="team-member role-writer"><div class="role-icon">✍️</div><div class="member-info"><div class="member-role">Escriba</div><div class="member-name">${d.writer}</div></div></div>
+                        <div class="team-member role-question"><div class="role-icon">🧐</div><div class="member-info"><div class="member-role">Questionador</div><div class="member-name">${d.questioner}</div></div></div>
+                        <div class="team-member role-heart"><div class="role-icon">❤️</div><div class="member-info"><div class="member-role">Empatia</div><div class="member-name">${d.heart}</div></div></div>
+                        <div class="team-member role-voice"><div class="role-icon">🎤</div><div class="member-info"><div class="member-role">Porta-Voz</div><div class="member-name">${d.voice}</div></div></div>
+                    </div>
+                </div>
+                <div class="canvas-section-title section-red">🔴 O QUE FAÇO?</div>
+                <div style="display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:18px;"><div class="canvas-card card-red"><div class="card-header"><span class="card-emoji">💡</span><span class="card-title">A Melhoria</span></div><div class="card-content">${d.solution}</div></div></div>
+                <div class="canvas-section-title section-blue">🔵 COMO FAÇO?</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;">
+                    <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🤝</span><span class="card-title">Parceiros</span></div><div class="card-content"><ul>${toL(d.partners)}</ul></div></div>
+                    <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">⚙️</span><span class="card-title">Atividades</span></div><div class="card-content"><ul>${toL(d.activities)}</ul></div></div>
+                    <div class="canvas-card card-blue"><div class="card-header"><span class="card-emoji">🛠️</span><span class="card-title">Recursos</span></div><div class="card-content"><ul>${toL(d.resources)}</ul></div></div>
+                </div>
+                <div class="canvas-section-title section-green">🟢 PARA QUEM?</div>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;">
+                    <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🎯</span><span class="card-title">Setores</span></div><div class="card-content"><ul>${toL(d.sectors)}</ul></div></div>
+                    <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">👥</span><span class="card-title">Engajamento</span></div><div class="card-content">${d.engagement}</div></div>
+                    <div class="canvas-card card-green"><div class="card-header"><span class="card-emoji">🚀</span><span class="card-title">Implementação</span></div><div class="card-content"><ul>${toL(d.implementation)}</ul></div></div>
+                </div>
+                <div class="canvas-section-title section-gold">🟡 QUANTO?</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+                    <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📉</span><span class="card-title">Custos</span></div><div class="card-content"><ul>${toL(d.costs)}</ul></div></div>
+                    <div class="canvas-card card-gold"><div class="card-header"><span class="card-emoji">📈</span><span class="card-title">Resultados</span></div><div class="card-content"><ul>${toL(d.results)}</ul></div></div>
+                </div>`;
+
+            document.getElementById('generated-content').innerHTML = html;
+            document.getElementById('generated-canvas').classList.add('show');
+            setTimeout(() => document.getElementById('generated-canvas').scrollIntoView({ behavior: 'smooth' }), 300);
+            showToast('Canvas gerado!', '#00a65a');
+            autoSaveCanvas('novo');
+        }
+
+        // ═══ LIMPAR ═══
+        function clearForm() {
+            if (!confirm('Limpar todos os campos?')) return;
+            ['f-company','f-project-name','f-leader','f-time','f-writer','f-questioner','f-heart','f-voice','f-solution','f-partners','f-activities','f-resources','f-sectors','f-engagement','f-implementation','f-costs','f-results'].forEach(id => document.getElementById(id).value = '');
+            document.getElementById('generated-canvas').classList.remove('show');
+            document.getElementById('pptx-preview').classList.remove('show');
+            document.getElementById('cloud-status').classList.remove('show');
+            document.getElementById('company-banner').classList.remove('show');
+            showToast('Limpo!', '#475569');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ═══ IMPRIMIR ═══
+        function printCanvas() {
+            const c = document.getElementById('generated-content').innerHTML;
+            const w = window.open('','_blank');
+            w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Canvas de Melhoria</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Poppins,sans-serif;padding:20px;color:#333}.project-header{padding:20px;border:2px solid #c8a84e;border-radius:14px;margin-bottom:20px;background:#f4f9ff}.project-badge{display:inline-block;background:#00a65a;color:#fff;padding:5px 15px;border-radius:15px;font-size:11px;font-weight:700;margin-bottom:10px}.project-company{font-size:12px;color:#0b63ce;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}.project-name{font-size:22px;font-weight:900;color:#063b7a;display:flex;align-items:center;gap:8px}.team-info{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}.team-member{display:flex;align-items:center;gap:8px;border:1px solid #cfe6ff;padding:6px 12px;border-radius:8px;font-size:12px}.member-role{font-weight:700;font-size:10px;text-transform:uppercase}.member-name{font-size:12px;color:#475569}.canvas-section-title{text-align:center;font-size:13px;font-weight:800;color:#fff;padding:8px 15px;border-radius:8px;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}.section-red{background:#dc2626}.section-blue{background:#005ce6}.section-green{background:#00a65a}.section-gold{background:#f5a623}.canvas-card{border-radius:10px;padding:14px;margin-bottom:8px;break-inside:avoid}.card-blue{background:#edf4ff;border-left:4px solid #005ce6}.card-red{background:#fff5f5;border-left:4px solid #dc2626}.card-green{background:#ecfdf5;border-left:4px solid #00a65a}.card-gold{background:#fffbeb;border-left:4px solid #f5a623}.card-header{display:flex;align-items:center;gap:6px;margin-bottom:8px}.card-title{font-size:11px;font-weight:800;text-transform:uppercase}.card-content{font-size:12px;line-height:1.5}.card-content ul{padding-left:16px}@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}</style></head><body><div style="text-align:center;margin-bottom:12px"><span style="font-size:13px;color:#64748b;letter-spacing:2px;text-transform:uppercase">Instituto Impulso Coaching</span><br><span style="font-size:10px;color:#94a3b8;">Canvas de Melhoria Continua</span></div>${c}</body></html>`);
+            w.document.close();
+            setTimeout(() => w.print(), 500);
+        }
+
+        // ═══ POWERPOINT ═══
+        function generatePPTX(source) {
+            document.getElementById('loading').classList.add('show');
+            setTimeout(() => {
+                try {
+                    let d;
+                    if (source === 'novo') {
+                        d = getFormData();
+                        d.team = [d.time, d.writer, d.questioner, d.heart, d.voice].filter(n => n !== 'A definir').join(', ') || 'Equipe a definir';
+                    } else { d = projectsData[source]; }
+
+                    const companyName = d.company || 'Empresa';
+                    const pptx = new PptxGenJS();
+                    pptx.layout = 'LAYOUT_WIDE';
+                    pptx.author = 'Instituto Impulso Coaching';
+                    pptx.title = d.name;
+
+                    const C = { pri: '0B63CE', pri2: '084AA0', wht: 'FFFFFF', dk: '1E293B', blu: '005CE6', dkBlu: '003D99', grn: '00A65A', dkGrn: '007A42', gld: 'C8A84E', yel: 'F5A623', ltGry: 'F4F9FF', mGry: '475569', red: 'DC2626', acn: '38BDF8', cBlu: 'EDF4FF', cRed: 'FFF5F5', cGrn: 'ECFDF5', cGld: 'FFFBEB' };
+
+                    // SLIDE 1 — CAPA
+                    const s1 = pptx.addSlide();
+                    s1.background = { color: C.wht };
+                    s1.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.12, fill: { color: C.pri } });
+                    s1.addShape(pptx.ShapeType.rect, { x: 0, y: 7.1, w: '100%', h: 0.4, fill: { color: C.gld } });
+                    s1.addShape(pptx.ShapeType.rect, { x: 0, y: 0.12, w: 0.12, h: 7, fill: { color: C.acn } });
+                    s1.addText('INSTITUTO IMPULSO COACHING', { x: 0.6, y: 0.5, w: 8, h: 0.5, fontSize: 14, fontFace: 'Arial', color: C.mGry, letterSpacing: 3 });
+                    s1.addText('A mudanca pode acontecer em um instante', { x: 0.6, y: 0.9, w: 8, h: 0.3, fontSize: 10, fontFace: 'Arial', italic: true, color: C.mGry });
+                    s1.addShape(pptx.ShapeType.rect, { x: 0.6, y: 1.5, w: 12, h: 0.04, fill: { color: C.gld } });
+                    s1.addText(companyName.toUpperCase(), { x: 0.6, y: 1.8, w: 12, h: 0.5, fontSize: 13, fontFace: 'Arial', bold: true, color: C.pri, letterSpacing: 4 });
+                    s1.addText('CANVAS DE MELHORIA', { x: 0.6, y: 2.3, w: 12, h: 0.5, fontSize: 14, fontFace: 'Segoe UI', color: C.mGry, letterSpacing: 6 });
+                    s1.addText(d.name.toUpperCase(), { x: 0.6, y: 3.0, w: 12, h: 1.2, fontSize: 30, fontFace: 'Segoe UI', bold: true, color: C.dk, lineSpacingMultiple: 1.1 });
+                    s1.addShape(pptx.ShapeType.roundRect, { x: 0.6, y: 4.6, w: 12, h: 2.1, fill: { color: C.ltGry }, rectRadius: 0.15, line: { color: C.gld, width: 1.5 } });
+                    s1.addText('EQUIPE DO PROJETO', { x: 1.0, y: 4.7, w: 5, h: 0.4, fontSize: 11, fontFace: 'Arial', bold: true, color: C.pri, letterSpacing: 3 });
+                    s1.addShape(pptx.ShapeType.roundRect, { x: 1.0, y: 5.15, w: 4.5, h: 0.5, fill: { color: C.pri }, rectRadius: 0.1 });
+                    s1.addText('LIDER:  ' + d.leader, { x: 1.1, y: 5.15, w: 4.3, h: 0.5, fontSize: 13, fontFace: 'Segoe UI', bold: true, color: C.wht });
+                    const teamStr = typeof d.team === 'string' ? d.team : [d.time, d.writer, d.questioner, d.heart, d.voice].join(', ');
+                    s1.addText('Equipe: ' + teamStr, { x: 1.0, y: 5.8, w: 11.2, h: 0.7, fontSize: 12, fontFace: 'Segoe UI', color: C.dk, lineSpacingMultiple: 1.4 });
+                    s1.addText('Instituto Impulso Coaching  |  Canvas de Melhoria  |  ' + new Date().getFullYear(), { x: 0, y: 7.15, w: '100%', h: 0.3, fontSize: 10, fontFace: 'Arial', bold: true, color: C.wht, align: 'center' });
+
+                    // SLIDE 2 — O QUE + COMO
+                    const s2 = pptx.addSlide();
+                    s2.background = { color: C.wht };
+                    s2.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 1.0, fill: { color: C.red } });
+                    s2.addText('A MELHORIA  &  O PLANO', { x: 0.5, y: 0.15, w: 10, h: 0.45, fontSize: 22, fontFace: 'Segoe UI', bold: true, color: C.wht });
+                    s2.addText(companyName + '  |  ' + d.name, { x: 0.5, y: 0.55, w: 10, h: 0.35, fontSize: 11, fontFace: 'Arial', color: 'FFCCCC' });
+                    s2.addShape(pptx.ShapeType.roundRect, { x: 0.5, y: 1.3, w: 12.3, h: 2.1, fill: { color: C.cRed }, rectRadius: 0.15, line: { color: 'FCA5A5', width: 1.5 } });
+                    s2.addText('A MELHORIA (SOLUCAO)', { x: 0.8, y: 1.4, w: 5, h: 0.3, fontSize: 11, fontFace: 'Arial', bold: true, color: C.red });
+                    s2.addText(d.solution, { x: 0.8, y: 1.8, w: 11.7, h: 1.4, fontSize: 13, fontFace: 'Segoe UI', color: C.dk, lineSpacingMultiple: 1.4, valign: 'top' });
+                    const cW = 3.9, cY = 3.8, cH = 3.1;
+                    [[0.5, d.partners, 'PARCEIROS CHAVE'], [4.7, d.activities, 'ATIVIDADES CHAVE'], [8.9, d.resources, 'RECURSOS CHAVE']].forEach(([x, txt, t]) => {
+                        s2.addShape(pptx.ShapeType.roundRect, { x, y: cY, w: cW, h: cH, fill: { color: C.cBlu }, rectRadius: 0.15, line: { color: 'B3D1FF', width: 1.5 } });
+                        s2.addText(t, { x: x + 0.2, y: cY + 0.1, w: cW - 0.4, h: 0.3, fontSize: 10, fontFace: 'Arial', bold: true, color: C.blu });
+                        s2.addText(txt.split(',').map(i => '•  ' + i.trim()).join('\n'), { x: x + 0.2, y: cY + 0.5, w: cW - 0.4, h: cH - 0.7, fontSize: 11, fontFace: 'Segoe UI', color: C.dk, lineSpacingMultiple: 1.5, valign: 'top' });
+                    });
+                    s2.addShape(pptx.ShapeType.rect, { x: 0, y: 7.3, w: '100%', h: 0.2, fill: { color: C.blu } });
+
+                    // SLIDE 3 — PARA QUEM
+                    const s3 = pptx.addSlide();
+                    s3.background = { color: C.wht };
+                    s3.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 1.0, fill: { color: C.grn } });
+                    s3.addText('IMPACTO  &  GESTAO DA MUDANCA', { x: 0.5, y: 0.15, w: 10, h: 0.45, fontSize: 22, fontFace: 'Segoe UI', bold: true, color: C.wht });
+                    s3.addText(companyName, { x: 0.5, y: 0.55, w: 10, h: 0.35, fontSize: 11, fontFace: 'Arial', color: 'B3FFCC' });
+                    const g3Y = 1.3, g3H = 2.6;
+                    [[0.5, d.sectors, 'SETORES IMPACTADOS'], [4.7, d.engagement, 'ENGAJAMENTO'], [8.9, d.implementation, 'IMPLEMENTACAO']].forEach(([x, txt, t], i) => {
+                        s3.addShape(pptx.ShapeType.roundRect, { x, y: g3Y, w: cW, h: g3H, fill: { color: C.cGrn }, rectRadius: 0.15, line: { color: '86EFAC', width: 1.5 } });
+                        s3.addText(t, { x: x + 0.2, y: g3Y + 0.1, w: cW - 0.4, h: 0.3, fontSize: 10, fontFace: 'Arial', bold: true, color: C.grn });
+                        const body = (i === 1) ? txt : txt.split(',').map(j => '•  ' + j.trim()).join('\n');
+                        s3.addText(body, { x: x + 0.2, y: g3Y + 0.5, w: cW - 0.4, h: g3H - 0.7, fontSize: 11, fontFace: 'Segoe UI', color: C.dk, lineSpacingMultiple: 1.5, valign: 'top' });
+                    });
+                    s3.addShape(pptx.ShapeType.rect, { x: 0, y: 7.3, w: '100%', h: 0.2, fill: { color: C.grn } });
+
+                    // SLIDE 4 — QUANTO
+                    const s4 = pptx.addSlide();
+                    s4.background = { color: C.wht };
+                    s4.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 1.0, fill: { color: C.yel } });
+                    s4.addText('VIABILIDADE: ESFORCO vs. RESULTADO', { x: 0.5, y: 0.15, w: 10, h: 0.45, fontSize: 22, fontFace: 'Segoe UI', bold: true, color: C.dk });
+                    s4.addText(companyName, { x: 0.5, y: 0.55, w: 10, h: 0.35, fontSize: 11, fontFace: 'Arial', color: '7A6520' });
+                    const hW = 5.9, s4Y2 = 1.3, s4H2 = 4.3;
+                    s4.addShape(pptx.ShapeType.roundRect, { x: 0.5, y: s4Y2, w: hW, h: s4H2, fill: { color: C.cGld }, rectRadius: 0.15, line: { color: 'FCD34D', width: 1.5 } });
+                    s4.addShape(pptx.ShapeType.roundRect, { x: 0.7, y: s4Y2 + 0.15, w: 2.8, h: 0.38, fill: { color: C.yel }, rectRadius: 0.1 });
+                    s4.addText('CUSTOS E ESFORCO', { x: 0.8, y: s4Y2 + 0.15, w: 2.6, h: 0.38, fontSize: 10, fontFace: 'Arial', bold: true, color: C.dk, align: 'center' });
+                    s4.addText(d.costs.split(',').map(i => '•  ' + i.trim()).join('\n'), { x: 0.8, y: s4Y2 + 0.75, w: hW - 0.6, h: s4H2 - 1.1, fontSize: 12, fontFace: 'Segoe UI', color: C.dk, lineSpacingMultiple: 1.6, valign: 'top' });
+                    s4.addShape(pptx.ShapeType.roundRect, { x: 6.9, y: s4Y2, w: hW, h: s4H2, fill: { color: C.cGrn }, rectRadius: 0.15, line: { color: '86EFAC', width: 2 } });
+                    s4.addShape(pptx.ShapeType.roundRect, { x: 7.1, y: s4Y2 + 0.15, w: 3.4, h: 0.38, fill: { color: C.grn }, rectRadius: 0.1 });
+                    s4.addText('RESULTADOS ESPERADOS', { x: 7.2, y: s4Y2 + 0.15, w: 3.2, h: 0.38, fontSize: 10, fontFace: 'Arial', bold: true, color: C.wht, align: 'center' });
+                    s4.addText(d.results.split(',').map(i => '✓  ' + i.trim()).join('\n'), { x: 7.2, y: s4Y2 + 0.75, w: hW - 0.6, h: s4H2 - 1.1, fontSize: 12, fontFace: 'Segoe UI', color: '006633', bold: true, lineSpacingMultiple: 1.6, valign: 'top' });
+                    s4.addText('→', { x: 5.9, y: 3.0, w: 1.5, h: 1.0, fontSize: 44, fontFace: 'Segoe UI', color: C.gld, align: 'center', valign: 'middle' });
+                    s4.addShape(pptx.ShapeType.roundRect, { x: 0.5, y: 6.1, w: 12.3, h: 0.8, fill: { color: C.pri }, rectRadius: 0.1 });
+                    s4.addText('Instituto Impulso Coaching  —  ' + companyName + '  —  ' + new Date().getFullYear(), { x: 0.5, y: 6.1, w: 12.3, h: 0.8, fontSize: 13, fontFace: 'Segoe UI', bold: true, color: C.wht, align: 'center', valign: 'middle' });
+                    s4.addShape(pptx.ShapeType.rect, { x: 0, y: 7.3, w: '100%', h: 0.2, fill: { color: C.gld } });
+
+                    const fn = 'Canvas_' + companyName.replace(/[^a-zA-Z0-9]/g,'_').substring(0,20) + '_' + d.name.replace(/[^a-zA-Z0-9]/g,'_').substring(0,30);
+                    pptx.writeFile({ fileName: fn }).then(() => {
+                        document.getElementById('loading').classList.remove('show');
+                        showToast('PowerPoint baixado!', '#D24726');
+                        if (source === 'novo') showSlidesPreview(d);
+                        autoSaveCanvas(source);
+                    });
+                } catch (err) {
+                    document.getElementById('loading').classList.remove('show');
+                    showToast('Erro: ' + err.message, '#dc2626');
+                    console.error(err);
+                }
+            }, 500);
+        }
+
+        function showSlidesPreview(d) {
+            const p = document.getElementById('pptx-preview');
+            const c = document.getElementById('slides-preview-content');
+            const co = d.company !== 'A definir' ? d.company : '';
+            const tm = typeof d.team === 'string' ? d.team : [d.time, d.writer, d.questioner, d.heart, d.voice].filter(n => n !== 'A definir').join(', ');
+            c.innerHTML = `
+                <div class="slide-thumb"><div class="slide-thumb-header" style="background:linear-gradient(135deg,#0b63ce,#084aa0);">SLIDE 1 — CAPA</div><div class="slide-thumb-body"><div style="font-size:9px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;">Instituto Impulso Coaching</div>${co ? '<div class="st-title" style="color:#0b63ce;">' + co + '</div>' : ''}<div class="st-title">${d.name}</div><div style="margin-top:6px;padding:6px;background:#f4f9ff;border-radius:6px;font-size:10px;"><strong>Líder:</strong> ${d.leader}<br><strong>Equipe:</strong> ${tm}</div></div></div>
+                <div class="slide-thumb"><div class="slide-thumb-header" style="background:linear-gradient(135deg,#dc2626,#005ce6);">SLIDE 2 — MELHORIA + PLANO</div><div class="slide-thumb-body"><div class="st-title" style="color:#dc2626;">Solução</div><div style="font-size:10px;margin-bottom:4px;">${d.solution.substring(0,70)}...</div><div class="st-title" style="color:#005ce6;">Como</div><ul style="font-size:10px;"><li>${d.partners.split(',')[0]}</li><li>${d.activities.split(',')[0]}</li></ul></div></div>
+                <div class="slide-thumb"><div class="slide-thumb-header" style="background:linear-gradient(135deg,#00a65a,#007a42);">SLIDE 3 — IMPACTO</div><div class="slide-thumb-body"><div class="st-title" style="color:#00a65a;">Para Quem?</div><ul style="font-size:10px;"><li>${d.sectors.split(',').slice(0,2).join(', ')}</li><li>${d.engagement.substring(0,40)}...</li></ul></div></div>
+                <div class="slide-thumb"><div class="slide-thumb-header" style="background:linear-gradient(135deg,#f5a623,#d48f1a);">SLIDE 4 — ESFORÇO vs. RESULTADO</div><div class="slide-thumb-body"><div style="display:flex;gap:6px;"><div style="flex:1;background:#fffbeb;padding:5px;border-radius:6px;font-size:9px;"><strong>Custos:</strong> ${d.costs.split(',')[0]}</div><div style="flex:1;background:#ecfdf5;padding:5px;border-radius:6px;font-size:9px;"><strong style="color:#00a65a;">Resultados:</strong> ${d.results.split(',')[0]}</div></div></div></div>
+            `;
+            p.classList.add('show');
+            setTimeout(() => p.scrollIntoView({ behavior: 'smooth' }), 400);
+        }
+
+        function showToast(msg, color) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            t.style.background = color || '#00a65a';
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 4000);
+        }
+    </script>
+</body>
+</html>
